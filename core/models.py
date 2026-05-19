@@ -23,9 +23,11 @@ class Usuario(AbstractUser):
         verbose_name='Rol',
     )
 
+    @property
     def es_admin(self):
         return self.rol == self.ROL_ADMIN
 
+    @property
     def es_operador(self):
         return self.rol == self.ROL_OPERADOR
 

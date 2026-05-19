@@ -4,7 +4,8 @@ from django.views.generic import RedirectView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', RedirectView.as_view(url='/productos/', permanent=False)),
+    # La raíz redirige al login; desde ahí cada rol va a su dashboard
+    path('', RedirectView.as_view(url='/login/', permanent=False)),
     path('', include('core.urls')),
     path('productos/', include('gestion_inventario.urls')),
 ]
