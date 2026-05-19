@@ -127,3 +127,11 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Modelo de usuario personalizado
+AUTH_USER_MODEL = 'core.Usuario'
+
+# Redirecciones de autenticación
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'lista_productos'
+LOGOUT_REDIRECT_URL = 'login'
