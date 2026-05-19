@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}Eliminar Categoría{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-5">
+        <div class="card border-danger">
+            <div class="card-header bg-danger text-white fw-semibold">
+                <i class="bi bi-exclamation-triangle me-2"></i>Confirmar eliminación
+            </div>
+            <div class="card-body p-4 text-center">
+                <p class="mb-1">¿Estás seguro de que deseas eliminar la categoría:</p>
+                <p class="fw-bold fs-5">{{ categoria.nombre }}</p>
+                <p class="text-muted small">Esta acción no se puede deshacer. Los productos asociados también se verán afectados.</p>
+                <form method="post" class="d-flex gap-2 justify-content-center mt-3">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi bi-trash me-2"></i>Sí, eliminar
+                    </button>
+                    <a href="{% url 'lista_categorias' %}" class="btn btn-outline-secondary">Cancelar</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
