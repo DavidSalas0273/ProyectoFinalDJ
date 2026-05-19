@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+
+{% block title %}Mi Dashboard{% endblock %}
+
+{% block extra_css %}
+<style>
+    .metric-card { border-left: 4px solid; }
+    .metric-card.azul   { border-color: #0d6efd; }
+    .metric-card.verde  { border-color: #198754; }
+    .metric-card.rojo   { border-color: #dc3545; }
+    .metric-card.naranja { border-color: #fd7e14; }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- Encabezado -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h3 class="fw-bold mb-0">
+            <i class="bi bi-person-workspace me-2 text-primary"></i>
+            Bienvenido, {{ user.get_full_name|default:user.username }}
+        </h3>
+        <span class="badge bg-primary mt-1">Operador</span>
+    </div>
+    <a href="{% url 'crear_venta' %}" class="btn btn-success">
+        <i class="bi bi-cart-plus me-2"></i>Nueva Venta
+    </a>
+</div>
+
+<!-- Métricas -->
+<div class="row g-3 mb-4">
+    <div class="col-6 col-md-3">
+        <div class="card metric-card azul h-100">
+            <div class="card-body">
+                <div class="text-muted small">Productos disponibles</div>
+                <div class="fs-3 fw-bold text-primary">{{ productos.count }}</div>
+                <div class="text-muted small"><i class="bi bi-box-seam"></i></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="card metric-card verde h-100">
+            <div class="card-body">
+                <div class="text-muted small">Mis ventas (total)</div>
+                <div class="fs-4 fw-bold text-success">${{ total_mis_ventas|floatformat:2 }}</div>
+                <div class="text-muted small"><i class="bi bi-cart-check"></i></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="card metric-card naranja h-100">
+            <div class="card-body">
+                <div class="text-muted small">Mis ventas (cantidad)</div>
+                <div class="fs-3 fw-bold text-warning">{{ mis_ventas.count }}</div>
+                <div class="text-muted small"><i class="bi bi-receipt"></i></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="card metric-card rojo h-100">
+            <div class="card-body">
+                <div class="text-muted small">Bajo stock</div>
+                <div class="fs-3 fw-bold text-danger">{{ productos_bajo_stock|length }}</div>
+                <div class="text-muted small"><i class="bi bi-exclamation-triangle"></i></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Alerta bajo stock -->
+{% if productos_bajo_stock %}
+<div class="alert alert-warning alert-dismissible fade show mb-4" role="alert">
+    <strong><i class="bi bi-exclamation-triangle-fill me-2"></i>Productos con stock bajo:</strong>
+    <ul class="mb-0 mt-1">
+        {% for p in productos_bajo_stock %}
+        <li><strong>{{ p.nombre }}</strong> — Stock: <span class="badge bg-danger">{{ p.stock }}</span> / Mínimo: {{ p.stock_minimo }}</li>
+        {% endfor %}
+    </ul>
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+</div>
+{% endif %}
+
+<div class="row g-4">
+
+    <!-- Mis últimas ventas -->
+    <div class="col-lg-7">
+        <div class="card h-100">
+            <div class="card-header bg-white fw-semibold d-flex justify-content-between align-items-center">
+                <span><i class="bi bi-clock-history me-2 text-success"></i>Mis últimas ventas</span>
+                <a href="{% url 'lista_ventas' %}" class="btn btn-sm btn-outline-secondary">Ver todas</a>
+            </div>
+            <div class="card-body p-0">
+                {% if mis_ventas %}
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Producto</th>
+                                <th class="text-center">Cantidad</th>
+                                <th class="text-end">Total</th>
+                                <th>Fecha</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for venta in mis_ventas %}
+                            <tr>
+                                <td class="fw-semibold">{{ venta.producto.nombre }}</td>
+                                <td class="text-center">{{ venta.cantidad }}</td>
+                                <td class="text-end text-success fw-semibold">${{ venta.total|floatformat:2 }}</td>
+                                <td class="text-muted small">{{ venta.fecha|date:"d/m/Y H:i" }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="text-center py-4 text-muted">
+                    <i class="bi bi-cart-x fs-2 d-block mb-2"></i>
+                    Aún no has registrado ventas.
+                    <div class="mt-2">
+                        <a href="{% url 'crear_venta' %}" class="btn btn-sm btn-success">
+                            <i class="bi bi-cart-plus me-1"></i>Registrar primera venta
+                        </a>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Accesos rápidos -->
+    <div class="col-lg-5">
+        <div class="card h-100">
+            <div class="card-header bg-white fw-semibold">
+                <i class="bi bi-lightning-charge me-2 text-warning"></i>Accesos rápidos
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a href="{% url 'crear_venta' %}" class="btn btn-success btn-lg">
+                        <i class="bi bi-cart-plus me-2"></i>Nueva Venta
+                    </a>
+                    <a href="{% url 'lista_ventas' %}" class="btn btn-outline-success">
+                        <i class="bi bi-cart me-2"></i>Ver todas mis ventas
+                    </a>
+                    <hr class="my-1">
+                    <a href="{% url 'lista_productos' %}" class="btn btn-outline-primary">
+                        <i class="bi bi-box-seam me-2"></i>Ver productos
+                    </a>
+                    <a href="{% url 'lista_categorias' %}" class="btn btn-outline-secondary">
+                        <i class="bi bi-tags me-2"></i>Ver categorías
+                    </a>
+                    <a href="{% url 'lista_proveedores' %}" class="btn btn-outline-secondary">
+                        <i class="bi bi-truck me-2"></i>Ver proveedores
+                    </a>
+                    <hr class="my-1">
+                    <a href="{% url 'perfil' %}" class="btn btn-outline-dark">
+                        <i class="bi bi-person me-2"></i>Mi perfil
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

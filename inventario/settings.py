@@ -150,7 +150,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 AUTH_USER_MODEL = 'core.Usuario'
 
 LOGIN_URL = 'login'
-LOGIN_REDIRECT_URL = 'lista_productos'
+LOGIN_REDIRECT_URL = 'login'   # la vista de login redirige por rol
 LOGOUT_REDIRECT_URL = 'login'
 
 # HTTPS en producción
