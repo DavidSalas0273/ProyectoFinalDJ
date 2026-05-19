@@ -52,7 +52,7 @@ def iniciar_sesion(request):
 
 def _redirigir_por_rol(user):
     """Devuelve un redirect según el rol del usuario."""
-    if user.es_admin():
+    if user.es_admin:
         return redirect('dashboard')
     return redirect('dashboard_operador')
 
@@ -90,7 +90,7 @@ def dashboard_operador(request):
     from django.db.models import Sum, F
 
     # Si un admin llega aquí lo mandamos a su dashboard
-    if request.user.es_admin():
+    if request.user.es_admin:
         return redirect('dashboard')
 
     productos = Producto.objects.select_related('categoria', 'proveedor').all()

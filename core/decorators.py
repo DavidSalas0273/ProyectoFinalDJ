@@ -9,7 +9,7 @@ def solo_admin(view_func):
     def wrapper(request, *args, **kwargs):
         if not request.user.is_authenticated:
             return redirect('login')
-        if not request.user.es_admin():
+        if not request.user.es_admin:
             messages.error(request, 'No tienes permisos para acceder a esta sección.')
             return redirect('lista_productos')
         return view_func(request, *args, **kwargs)
@@ -22,7 +22,7 @@ def solo_operador(view_func):
     def wrapper(request, *args, **kwargs):
         if not request.user.is_authenticated:
             return redirect('login')
-        if not request.user.es_operador():
+        if not request.user.es_operador:
             messages.error(request, 'Esta sección es solo para operadores.')
             return redirect('lista_productos')
         return view_func(request, *args, **kwargs)
