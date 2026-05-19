@@ -14,6 +14,17 @@
     {% endif %}
 </div>
 
+{% if productos_bajo_stock %}
+<div class="alert alert-danger alert-bajo-stock alert-dismissible fade show" role="alert">
+    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+    <strong>Alerta de stock bajo:</strong>
+    {% for p in productos_bajo_stock %}
+        <span class="badge bg-danger ms-1">{{ p.nombre }} ({{ p.stock }})</span>
+    {% endfor %}
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+</div>
+{% endif %}
+
 {% if productos %}
 <div class="card">
     <div class="table-responsive">
@@ -25,6 +36,7 @@
                     <th>Proveedor</th>
                     <th class="text-end">Precio</th>
                     <th class="text-center">Stock</th>
+                    <th class="text-center">Mínimo</th>
                     {% if user.es_admin %}
                     <th class="text-center">Acciones</th>
                     {% endif %}
@@ -32,22 +44,28 @@
             </thead>
             <tbody>
                 {% for producto in productos %}
-                <tr>
-                    <td class="fw-semibold">{{ producto.nombre }}</td>
+                <tr {% if producto.bajo_stock %}class="table-danger"{% endif %}>
+                    <td class="fw-semibold">
+                        {{ producto.nombre }}
+                        {% if producto.bajo_stock %}
+                        <span class="badge bg-danger ms-1"><i class="bi bi-exclamation-triangle"></i> Bajo stock</span>
+                        {% endif %}
+                    </td>
                     <td>
                         <span class="badge bg-secondary">{{ producto.categoria }}</span>
                     </td>
                     <td>{{ producto.proveedor }}</td>
                     <td class="text-end">${{ producto.precio }}</td>
                     <td class="text-center">
-                        {% if producto.stock <= 5 %}
+                        {% if producto.bajo_stock %}
                         <span class="badge bg-danger">{{ producto.stock }}</span>
-                        {% elif producto.stock <= 20 %}
+                        {% elif producto.stock <= producto.stock_minimo|add:10 %}
                         <span class="badge bg-warning text-dark">{{ producto.stock }}</span>
                         {% else %}
                         <span class="badge bg-success">{{ producto.stock }}</span>
                         {% endif %}
                     </td>
+                    <td class="text-center text-muted small">{{ producto.stock_minimo }}</td>
                     {% if user.es_admin %}
                     <td class="text-center">
                         <a href="{% url 'editar_producto' producto.id %}" class="btn btn-sm btn-outline-primary me-1">

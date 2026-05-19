@@ -1,0 +1,240 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block extra_css %}
+<style>
+    .metric-card { border-left: 4px solid; }
+    .metric-card.azul  { border-color: #0d6efd; }
+    .metric-card.verde { border-color: #198754; }
+    .metric-card.rojo  { border-color: #dc3545; }
+    .metric-card.naranja { border-color: #fd7e14; }
+    .metric-card.morado { border-color: #6f42c1; }
+    .chart-container { position: relative; height: 300px; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h3 class="fw-bold mb-0">
+        <i class="bi bi-speedometer2 me-2 text-primary"></i>Dashboard
+    </h3>
+    <div class="d-flex gap-2">
+        <a href="{% url 'reporte_inventario' %}" class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-clipboard-data me-1"></i>Reporte Inventario
+        </a>
+        <a href="{% url 'reporte_ventas' %}" class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-graph-up me-1"></i>Reporte Ventas
+        </a>
+    </div>
+</div>
+
+<!-- Métricas -->
+<div class="row g-3 mb-4">
+    <div class="col-6 col-md-4 col-lg-2">
+        <div class="card metric-card azul h-100">
+            <div class="card-body">
+                <div class="text-muted small">Productos</div>
+                <div class="fs-3 fw-bold text-primary">{{ total_productos }}</div>
+                <div class="text-muted small"><i class="bi bi-box-seam"></i></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-4 col-lg-2">
+        <div class="card metric-card morado h-100">
+            <div class="card-body">
+                <div class="text-muted small">Categorías</div>
+                <div class="fs-3 fw-bold" style="color:#6f42c1">{{ total_categorias }}</div>
+                <div class="text-muted small"><i class="bi bi-tags"></i></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-4 col-lg-2">
+        <div class="card metric-card naranja h-100">
+            <div class="card-body">
+                <div class="text-muted small">Proveedores</div>
+                <div class="fs-3 fw-bold text-warning">{{ total_proveedores }}</div>
+                <div class="text-muted small"><i class="bi bi-truck"></i></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-4 col-lg-2">
+        <div class="card metric-card verde h-100">
+            <div class="card-body">
+                <div class="text-muted small">Total Ventas</div>
+                <div class="fs-4 fw-bold text-success">${{ total_ventas|floatformat:2 }}</div>
+                <div class="text-muted small"><i class="bi bi-cart"></i></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-4 col-lg-2">
+        <div class="card metric-card azul h-100">
+            <div class="card-body">
+                <div class="text-muted small">Total Compras</div>
+                <div class="fs-4 fw-bold text-primary">${{ total_compras|floatformat:2 }}</div>
+                <div class="text-muted small"><i class="bi bi-bag"></i></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-4 col-lg-2">
+        <div class="card metric-card rojo h-100">
+            <div class="card-body">
+                <div class="text-muted small">Bajo Stock</div>
+                <div class="fs-3 fw-bold text-danger">{{ productos_bajo_stock.count }}</div>
+                <div class="text-muted small"><i class="bi bi-exclamation-triangle"></i></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Alerta bajo stock -->
+{% if productos_bajo_stock %}
+<div class="alert alert-danger alert-bajo-stock alert-dismissible fade show mb-4" role="alert">
+    <strong><i class="bi bi-exclamation-triangle-fill me-2"></i>Productos con stock bajo:</strong>
+    <ul class="mb-0 mt-1">
+        {% for p in productos_bajo_stock %}
+        <li>
+            <strong>{{ p.nombre }}</strong> — Stock actual: <span class="badge bg-danger">{{ p.stock }}</span>
+            / Mínimo: {{ p.stock_minimo }}
+        </li>
+        {% endfor %}
+    </ul>
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+</div>
+{% endif %}
+
+<!-- Gráficos fila 1 -->
+<div class="row g-4 mb-4">
+    <!-- Gráfico: Productos más vendidos -->
+    <div class="col-lg-6">
+        <div class="card h-100">
+            <div class="card-header bg-white fw-semibold">
+                <i class="bi bi-bar-chart me-2 text-primary"></i>Productos más vendidos (Top 10)
+            </div>
+            <div class="card-body">
+                <div class="chart-container">
+                    <canvas id="chartVendidos"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gráfico: Stock por categoría -->
+    <div class="col-lg-6">
+        <div class="card h-100">
+            <div class="card-header bg-white fw-semibold">
+                <i class="bi bi-pie-chart me-2 text-success"></i>Stock por categoría
+            </div>
+            <div class="card-body">
+                <div class="chart-container">
+                    <canvas id="chartCategorias"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Gráfico fila 2: Ventas últimos 30 días -->
+<div class="row g-4 mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-white fw-semibold">
+                <i class="bi bi-graph-up me-2 text-warning"></i>Ventas diarias — últimos 30 días
+            </div>
+            <div class="card-body">
+                <div class="chart-container" style="height:250px">
+                    <canvas id="chartDias"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<script>
+    // Datos desde Django
+    const labelsVentas    = {{ labels_ventas|safe }};
+    const dataVentas      = {{ data_ventas|safe }};
+    const labelsCategorias = {{ labels_categorias|safe }};
+    const dataStock       = {{ data_stock|safe }};
+    const labelsDias      = {{ labels_dias|safe }};
+    const dataDias        = {{ data_dias|safe }};
+
+    // Paleta de colores
+    const colores = [
+        '#0d6efd','#198754','#dc3545','#fd7e14','#6f42c1',
+        '#20c997','#0dcaf0','#ffc107','#d63384','#6c757d'
+    ];
+
+    // Gráfico 1: Productos más vendidos (barras horizontales)
+    new Chart(document.getElementById('chartVendidos'), {
+        type: 'bar',
+        data: {
+            labels: labelsVentas,
+            datasets: [{
+                label: 'Unidades vendidas',
+                data: dataVentas,
+                backgroundColor: colores,
+                borderRadius: 4,
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                x: { beginAtZero: true, ticks: { precision: 0 } }
+            }
+        }
+    });
+
+    // Gráfico 2: Stock por categoría (dona)
+    new Chart(document.getElementById('chartCategorias'), {
+        type: 'doughnut',
+        data: {
+            labels: labelsCategorias,
+            datasets: [{
+                data: dataStock,
+                backgroundColor: colores,
+                hoverOffset: 8,
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'right' }
+            }
+        }
+    });
+
+    // Gráfico 3: Ventas diarias (línea)
+    new Chart(document.getElementById('chartDias'), {
+        type: 'line',
+        data: {
+            labels: labelsDias,
+            datasets: [{
+                label: 'Unidades vendidas',
+                data: dataDias,
+                borderColor: '#0d6efd',
+                backgroundColor: 'rgba(13,110,253,0.1)',
+                fill: true,
+                tension: 0.3,
+                pointRadius: 4,
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                y: { beginAtZero: true, ticks: { precision: 0 } }
+            }
+        }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %}Ventas{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h3 class="fw-bold mb-0">
+        <i class="bi bi-cart me-2 text-primary"></i>Ventas
+    </h3>
+    <a href="{% url 'crear_venta' %}" class="btn btn-primary">
+        <i class="bi bi-cart-plus me-2"></i>Nueva Venta
+    </a>
+</div>
+
+{% if ventas %}
+<div class="card">
+    <div class="table-responsive">
+        <table class="table table-hover mb-0">
+            <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Producto</th>
+                    <th class="text-center">Cantidad</th>
+                    <th class="text-end">Precio Unit.</th>
+                    <th class="text-end">Total</th>
+                    <th>Fecha</th>
+                    <th>Usuario</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for venta in ventas %}
+                <tr>
+                    <td class="text-muted small">{{ venta.id }}</td>
+                    <td class="fw-semibold">{{ venta.producto.nombre }}</td>
+                    <td class="text-center">
+                        <span class="badge bg-danger">-{{ venta.cantidad }}</span>
+                    </td>
+                    <td class="text-end">${{ venta.precio_unitario }}</td>
+                    <td class="text-end fw-semibold">${{ venta.total }}</td>
+                    <td class="text-muted small">{{ venta.fecha|date:"d/m/Y H:i" }}</td>
+                    <td class="text-muted small">{{ venta.usuario.username|default:'-' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% else %}
+<div class="text-center py-5 text-muted">
+    <i class="bi bi-cart fs-1 d-block mb-3"></i>
+    <p>No hay ventas registradas.</p>
+    <a href="{% url 'crear_venta' %}" class="btn btn-primary">
+        <i class="bi bi-cart-plus me-2"></i>Registrar primera venta
+    </a>
+</div>
+{% endif %}
+{% endblock %}
