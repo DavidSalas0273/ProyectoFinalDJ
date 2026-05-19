@@ -1,0 +1,267 @@
+[
+{
+  "model": "gestion_inventario.categoria",
+  "pk": 1,
+  "fields": {
+    "nombre": "Electronica",
+    "descripcion": "Dispositivos electronicos y accesorios"
+  }
+},
+{
+  "model": "gestion_inventario.categoria",
+  "pk": 2,
+  "fields": {
+    "nombre": "Oficina",
+    "descripcion": "Articulos de oficina y papeleria"
+  }
+},
+{
+  "model": "gestion_inventario.categoria",
+  "pk": 3,
+  "fields": {
+    "nombre": "Herramientas",
+    "descripcion": "Herramientas manuales y electricas"
+  }
+},
+{
+  "model": "gestion_inventario.categoria",
+  "pk": 4,
+  "fields": {
+    "nombre": "Limpieza",
+    "descripcion": "Productos de limpieza e higiene"
+  }
+},
+{
+  "model": "gestion_inventario.categoria",
+  "pk": 5,
+  "fields": {
+    "nombre": "Alimentos",
+    "descripcion": "Alimentos y bebidas"
+  }
+},
+{
+  "model": "gestion_inventario.proveedor",
+  "pk": 1,
+  "fields": {
+    "nombre": "TechSupply SA",
+    "telefono": "+52 55 1234 5678",
+    "email": "ventas@techsupply.com",
+    "direccion": "Av. Tecnologia 100, CDMX"
+  }
+},
+{
+  "model": "gestion_inventario.proveedor",
+  "pk": 2,
+  "fields": {
+    "nombre": "OficMax Distribuidora",
+    "telefono": "+52 33 9876 5432",
+    "email": "pedidos@oficmax.com",
+    "direccion": "Calle Comercio 45, Guadalajara"
+  }
+},
+{
+  "model": "gestion_inventario.proveedor",
+  "pk": 3,
+  "fields": {
+    "nombre": "HerraTools MX",
+    "telefono": "+52 81 5555 1234",
+    "email": "info@herratools.mx",
+    "direccion": "Blvd. Industrial 200, Monterrey"
+  }
+},
+{
+  "model": "gestion_inventario.producto",
+  "pk": 1,
+  "fields": {
+    "nombre": "Laptop HP 15",
+    "descripcion": "Laptop HP 15 pulgadas, 8GB RAM, 256GB SSD",
+    "precio": "12500.00",
+    "stock": 25,
+    "stock_minimo": 5,
+    "categoria": 1,
+    "proveedor": 1
+  }
+},
+{
+  "model": "gestion_inventario.producto",
+  "pk": 2,
+  "fields": {
+    "nombre": "Mouse Inalambrico Logitech",
+    "descripcion": "Mouse inalambrico con receptor USB, 3 botones",
+    "precio": "350.00",
+    "stock": 80,
+    "stock_minimo": 10,
+    "categoria": 1,
+    "proveedor": 1
+  }
+},
+{
+  "model": "gestion_inventario.producto",
+  "pk": 3,
+  "fields": {
+    "nombre": "Teclado Mecanico RGB",
+    "descripcion": "Teclado mecanico con iluminacion RGB, switches azules",
+    "precio": "950.00",
+    "stock": 40,
+    "stock_minimo": 8,
+    "categoria": 1,
+    "proveedor": 1
+  }
+},
+{
+  "model": "gestion_inventario.producto",
+  "pk": 4,
+  "fields": {
+    "nombre": "Monitor 24 pulgadas",
+    "descripcion": "Monitor Full HD 24 pulgadas, 75Hz, panel IPS",
+    "precio": "4200.00",
+    "stock": 15,
+    "stock_minimo": 3,
+    "categoria": 1,
+    "proveedor": 1
+  }
+},
+{
+  "model": "gestion_inventario.producto",
+  "pk": 5,
+  "fields": {
+    "nombre": "Resma Papel A4",
+    "descripcion": "Resma de papel bond A4 500 hojas 75gr",
+    "precio": "85.00",
+    "stock": 200,
+    "stock_minimo": 30,
+    "categoria": 2,
+    "proveedor": 2
+  }
+},
+{
+  "model": "gestion_inventario.producto",
+  "pk": 6,
+  "fields": {
+    "nombre": "Boligrafo Azul x12",
+    "descripcion": "Caja de 12 boligrafos azules punta media",
+    "precio": "45.00",
+    "stock": 150,
+    "stock_minimo": 20,
+    "categoria": 2,
+    "proveedor": 2
+  }
+},
+{
+  "model": "gestion_inventario.producto",
+  "pk": 7,
+  "fields": {
+    "nombre": "Folder Manila x50",
+    "descripcion": "Paquete de 50 folders manila tamano carta",
+    "precio": "120.00",
+    "stock": 90,
+    "stock_minimo": 15,
+    "categoria": 2,
+    "proveedor": 2
+  }
+},
+{
+  "model": "gestion_inventario.producto",
+  "pk": 8,
+  "fields": {
+    "nombre": "Engrapadora Estandar",
+    "descripcion": "Engrapadora metalica capacidad 20 hojas",
+    "precio": "180.00",
+    "stock": 35,
+    "stock_minimo": 5,
+    "categoria": 2,
+    "proveedor": 2
+  }
+},
+{
+  "model": "gestion_inventario.producto",
+  "pk": 9,
+  "fields": {
+    "nombre": "Taladro Electrico 500W",
+    "descripcion": "Taladro electrico 500W con maletín y brocas",
+    "precio": "780.00",
+    "stock": 20,
+    "stock_minimo": 4,
+    "categoria": 3,
+    "proveedor": 3
+  }
+},
+{
+  "model": "gestion_inventario.producto",
+  "pk": 10,
+  "fields": {
+    "nombre": "Juego de Desarmadores x8",
+    "descripcion": "Set de 8 desarmadores planos y de cruz",
+    "precio": "220.00",
+    "stock": 60,
+    "stock_minimo": 10,
+    "categoria": 3,
+    "proveedor": 3
+  }
+},
+{
+  "model": "gestion_inventario.producto",
+  "pk": 11,
+  "fields": {
+    "nombre": "Cinta Metrica 5m",
+    "descripcion": "Cinta metrica de acero inoxidable 5 metros",
+    "precio": "95.00",
+    "stock": 45,
+    "stock_minimo": 8,
+    "categoria": 3,
+    "proveedor": 3
+  }
+},
+{
+  "model": "gestion_inventario.producto",
+  "pk": 12,
+  "fields": {
+    "nombre": "Escoba con Recogedor",
+    "descripcion": "Escoba plastica con recogedor incluido",
+    "precio": "75.00",
+    "stock": 70,
+    "stock_minimo": 10,
+    "categoria": 4,
+    "proveedor": 2
+  }
+},
+{
+  "model": "gestion_inventario.producto",
+  "pk": 13,
+  "fields": {
+    "nombre": "Detergente Liquido 5L",
+    "descripcion": "Detergente liquido multiusos 5 litros",
+    "precio": "180.00",
+    "stock": 55,
+    "stock_minimo": 10,
+    "categoria": 4,
+    "proveedor": 2
+  }
+},
+{
+  "model": "gestion_inventario.producto",
+  "pk": 14,
+  "fields": {
+    "nombre": "Agua Purificada 20L",
+    "descripcion": "Garrafon de agua purificada 20 litros",
+    "precio": "45.00",
+    "stock": 100,
+    "stock_minimo": 20,
+    "categoria": 5,
+    "proveedor": 2
+  }
+},
+{
+  "model": "gestion_inventario.producto",
+  "pk": 15,
+  "fields": {
+    "nombre": "Cafe Molido 500g",
+    "descripcion": "Cafe molido tostado oscuro 500 gramos",
+    "precio": "120.00",
+    "stock": 60,
+    "stock_minimo": 10,
+    "categoria": 5,
+    "proveedor": 2
+  }
+}
+]
