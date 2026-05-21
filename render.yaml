@@ -2,7 +2,24 @@ services:
   - type: web
     name: inventario-dj
     runtime: python
-    buildCommand: "./build.sh"
+    buildCommand: "pip install -r requirements.txt && python manage.py migrate && python manage.py collectstatic --no-input && python -c \"
+import os, django;
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'inventario.settings');
+django.setup();
+from core.models import Usuario;
+from gestion_inventario.models import Categoria, Proveedor, Producto;
+try:
+    if not Usuario.objects.filter(is_superuser=True).exists():
+        Usuario.objects.create_superuser(username='admin', email='admin@inventario.com', password='admin123', first_name='Administrador', last_name='Sistema', rol='admin');
+        print('✅ Superusuario creado');
+    if not Categoria.objects.exists():
+        cat1 = Categoria.objects.create(nombre='Electrónicos', descripcion='Productos electrónicos');
+        prov1 = Proveedor.objects.create(nombre='TechSupply', telefono='555-0001', email='ventas@techsupply.com', direccion='Av. Tecnología 123');
+        Producto.objects.create(nombre='Laptop Dell', descripcion='Laptop Dell Inspiron 15', precio=15000.00, stock=10, stock_minimo=2, categoria=cat1, proveedor=prov1);
+        Usuario.objects.get_or_create(username='operador', defaults={'email': 'operador@inventario.com', 'password': 'pbkdf2_sha256$600000$test$test', 'first_name': 'Juan', 'last_name': 'Pérez', 'rol': 'operador'});
+        print('✅ Datos iniciales cargados');
+except Exception as e: print(f'⚠️ Error: {e}')
+\""
     startCommand: "gunicorn inventario.wsgi:application --bind 0.0.0.0:$PORT --workers 1 --timeout 120"
     envVars:
       - key: SECRET_KEY
