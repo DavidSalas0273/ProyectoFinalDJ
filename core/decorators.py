@@ -11,7 +11,7 @@ def solo_admin(view_func):
             return redirect('login')
         if not request.user.es_admin:
             messages.error(request, 'No tienes permisos para acceder a esta sección.')
-            return redirect('lista_productos')
+            return redirect('dashboard_operador')
         return view_func(request, *args, **kwargs)
     return wrapper
 
@@ -24,7 +24,7 @@ def solo_operador(view_func):
             return redirect('login')
         if not request.user.es_operador:
             messages.error(request, 'Esta sección es solo para operadores.')
-            return redirect('lista_productos')
+            return redirect('dashboard')
         return view_func(request, *args, **kwargs)
     return wrapper
 

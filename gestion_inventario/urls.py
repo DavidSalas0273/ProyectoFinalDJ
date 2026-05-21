@@ -2,11 +2,14 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
+    # Dashboard
+    path('dashboard/', views.dashboard, name='dashboard'),
+
     # Productos
-    path('', views.lista_productos, name='lista_productos'),
-    path('crear/', views.crear_producto, name='crear_producto'),
-    path('editar/<int:id>/', views.editar_producto, name='editar_producto'),
-    path('eliminar/<int:id>/', views.eliminar_producto, name='eliminar_producto'),
+    path('productos/', views.lista_productos, name='lista_productos'),
+    path('productos/crear/', views.crear_producto, name='crear_producto'),
+    path('productos/editar/<int:id>/', views.editar_producto, name='editar_producto'),
+    path('productos/eliminar/<int:id>/', views.eliminar_producto, name='eliminar_producto'),
 
     # Categorías
     path('categorias/', views.lista_categorias, name='lista_categorias'),
@@ -27,9 +30,6 @@ urlpatterns = [
     # Ventas
     path('ventas/', views.lista_ventas, name='lista_ventas'),
     path('ventas/crear/', views.crear_venta, name='crear_venta'),
-
-    # Dashboard
-    path('dashboard/', views.dashboard, name='dashboard'),
 
     # Reportes
     path('reportes/inventario/', views.reporte_inventario, name='reporte_inventario'),

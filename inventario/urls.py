@@ -7,5 +7,5 @@ urlpatterns = [
     # La raíz redirige al login; desde ahí cada rol va a su dashboard
     path('', RedirectView.as_view(url='/login/', permanent=False)),
     path('', include('core.urls')),
-    path('productos/', include('gestion_inventario.urls')),
+    path('', include('gestion_inventario.urls')),
 ]
