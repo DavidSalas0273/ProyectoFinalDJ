@@ -2,15 +2,15 @@
 
 Sistema de gestión de inventario desarrollado con Django.
 
-## 🌐 Aplicación en Producción
+## Aplicación en Producción
 
 **URL:** https://proyectofinaldj.onrender.com
 
 ---
 
-## 🔐 Credenciales de Acceso
+## Credenciales de Acceso
 
-### 👨‍💼 Cuenta Administrador
+### Cuenta Administrador
 | Campo | Valor |
 |-------|-------|
 | **Usuario** | `admin` |
@@ -26,23 +26,23 @@ Sistema de gestión de inventario desarrollado con Django.
 
 ---
 
-## 🗂️ Funcionalidades
+## Funcionalidades
 
 ### Administrador
-- ✅ Dashboard con métricas y gráficos
-- ✅ Gestión de productos (CRUD)
-- ✅ Gestión de categorías (CRUD)
-- ✅ Gestión de proveedores (CRUD)
-- ✅ Registro de compras
-- ✅ Registro de ventas
-- ✅ Reportes de inventario y ventas
-- ✅ Exportación a Excel
-- ✅ Alertas de stock bajo
+-  Dashboard con métricas y gráficos
+-  Gestión de productos (CRUD)
+-  Gestión de categorías (CRUD)
+-  Gestión de proveedores (CRUD)
+-  Registro de compras
+-  Registro de ventas
+-  Reportes de inventario y ventas
+-  Exportación a Excel
+-  Alertas de stock bajo
 
 ### Operador
-- ✅ Dashboard con sus ventas
-- ✅ Visualización de productos
-- ✅ Registro de ventas
+-  Dashboard con sus ventas
+-  Visualización de productos
+-  Registro de ventas
 
 ---
 
@@ -56,7 +56,7 @@ Sistema de gestión de inventario desarrollado con Django.
 
 ---
 
-## 🚀 Instalación Local
+## Instalación Local
 
 ```bash
 # Clonar el repositorio
