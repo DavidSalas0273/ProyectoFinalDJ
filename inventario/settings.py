@@ -15,14 +15,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Seguridad
 # ─────────────────────────────────────────────
 
+# Configuración más flexible para desarrollo y producción
+DEBUG = os.environ.get('DEBUG', 'True').lower() in ('true', '1', 'yes')
+
 SECRET_KEY = os.environ.get(
     'SECRET_KEY',
-    'django-insecure-=pl#uecertv8m7q_=)l)++92ojh$85a_qbfd0yjtbo8yxtwi1j',
+    'django-insecure-=pl#uecertv8m7q_=)l)++92ojh$85a_qbfd0yjtbo8yxtwi1j'
 )
 
-DEBUG = os.environ.get('DEBUG', 'True') == 'True'
-
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost 127.0.0.1').split()
+ALLOWED_HOSTS = []
+if os.environ.get('ALLOWED_HOSTS'):
+    ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS').split()
+else:
+    ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 # Render agrega automáticamente el dominio — lo incluimos si está disponible
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
@@ -153,11 +158,53 @@ LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'login'   # la vista de login redirige por rol
 LOGOUT_REDIRECT_URL = 'login'
 
+# Configuración de logging
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'INFO',
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'core': {
+            'handlers': ['console'],
+            'level': 'DEBUG' if DEBUG else 'INFO',
+            'propagate': False,
+        },
+        'gestion_inventario': {
+            'handlers': ['console'],
+            'level': 'DEBUG' if DEBUG else 'INFO',
+            'propagate': False,
+        },
+    },
+}
+
 # HTTPS en producción
 if not DEBUG:
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
+    SECURE_SSL_REDIRECT = True
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
     if RENDER_EXTERNAL_HOSTNAME:
         CSRF_TRUSTED_ORIGINS = [
             f'https://{RENDER_EXTERNAL_HOSTNAME}',

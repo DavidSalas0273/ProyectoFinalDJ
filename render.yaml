@@ -3,7 +3,7 @@ services:
     name: inventario-dj
     runtime: python
     buildCommand: "./build.sh"
-    startCommand: "gunicorn inventario.wsgi:application --bind 0.0.0.0:$PORT"
+    startCommand: "gunicorn inventario.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --timeout 60"
     envVars:
       - key: SECRET_KEY
         generateValue: true
@@ -13,6 +13,8 @@ services:
         fromDatabase:
           name: inventario-db
           property: connectionString
+      - key: ALLOWED_HOSTS
+        value: "inventario-dj.onrender.com proyectofinaldj.onrender.com"
 
 databases:
   - name: inventario-db
